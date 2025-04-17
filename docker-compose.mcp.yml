@@ -1,0 +1,23 @@
+services:
+  mcp:
+    build:
+      context: ./mcp-server  # 使用 mcp-server 目錄來構建映像
+    image: ctxflow_mcp:latest  # 設置映像名稱
+    ports:
+      - "8000:8000"  # 映射容器端口 8000 到主機端口 8000
+    volumes:
+      - ./mcp-server:/app  # 把程式碼直接掛載到容器中的 /app 目錄
+    command: uvicorn mcp_server:app --host 0.0.0.0 --port 8000  # 啟動服務的命令
+    environment:
+      - SOME_ENV=prod  # 在容器中設置其他環境變數，如果需要的話
+      - OPENAI_API_KEY=${OPENAI_API_KEY}  # 引用父目錄 .env 文件中的 API Key
+      - GEMINI_API_KEY=${GEMINI_API_KEY} 
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY} 
+    env_file:
+      - ../.env  # 引用父目錄中的 .env 文件，來載入環境變數
+    networks:
+      - internal  # 使用內部網絡來讓容器彼此通信
+
+networks:
+  internal:
+    external: true  # 使用外部網絡，確保與其他服務能夠互通

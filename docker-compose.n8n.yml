@@ -1,0 +1,36 @@
+services:
+  n8n:
+    build:
+      context: ./n8n
+    image: ctxflow_n8n:latest
+    ports:
+      - "5678:5678"
+    volumes:
+      - ../n8n_data:/home/node/.n8n  # 更新掛載路徑，指向父目錄中的 .n8n_data 資料夾
+      - ./n8n/mcp-workflow.json:/data/mcp-workflow.json
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS}
+      - N8N_DEPLOYMENT_TYPE=${N8N_DEPLOYMENT_TYPE}
+      - N8N_HOST=${N8N_HOST}
+      - GENERIC_TIMEZONE=Asia/Taipei
+    env_file:
+      - ../.env  # 引用父目錄的 .env 文件
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5678"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+
+volumes:
+  n8n_data:
+
+networks:
+  internal:
+    external: true

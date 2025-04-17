@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Envs
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.journal
+
+# Secrets
+.env
+*.env
+.env.*
+!.env.example
+!.env.template
+
+# SQLite / local DBs
+*.sqlite
+
+# n8n sensitive data
+n8n/.data/
+n8n/*.sqlite
+n8n/*.log
+n8n/*.journal
+
+# Docker
+*.pid
+*.sock
+
+# Git
+.git/
